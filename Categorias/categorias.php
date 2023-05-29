@@ -1,3 +1,13 @@
+<?php
+  ini_set("display_errors" , 1);
+  ini_set("display_startup_errors" , 1);
+  error_reporting(E_ALL);
+
+  require_once("configCate.php");
+  $data = new Categorias();
+  $all =  $data -> SelectAll();
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -68,22 +78,36 @@
       <div class="parte-media">
         <div style="display: flex; justify-content: space-between;">
           <h2>Categorias</h2>
-          <button class="btn-m" data-bs-toggle="modal" data-bs-target="#registrarEstudiantes"><i class="bi bi-person-add " style="color: rgb(255, 255, 255);" ></i></button>
+          <button class="btn-m" data-bs-toggle="modal" data-bs-target="#registrar_categoria"><i class="bi bi-person-add " style="color: rgb(255, 255, 255);" ></i></button>
         </div>
         <div class="menuTabla contenedor2">
           <table class="table table-custom ">
             <thead>
               <tr>
                 <th scope="col">ID</th>
-                <th scope="col">IMAGEN</th>
                 <th scope="col">NOMBRES</th>
                 <th scope="col">DESCRIPCION</th>
+                <th scope="col">IMAGEN</th>
                 <th scope="col">EDITAR</th>
                 <th scope="col">BORRAR</th>
               </tr>
             </thead>
             <tbody class="" id="tabla">
               <!-- ///////Llenado DInamico desde la Base de Datos -->
+              <?php
+                foreach($all as $key => $val){
+              ?>
+              <tr>
+                <td><?php echo $val['id'] ?></td>
+                <td><?php echo $val['nombres'] ?></td>
+                <td><?php echo $val['descripcion'] ?></td>
+                <td><img src="../img/<?php echo $val['imagen'] ?>" alt="..."></td>
+                <td><a class="btn btn-outline-info" href="editarCate.php?id= <?= $val['id']?>"><strong>Editar</strong></a></td>
+                <td><a class="btn btn-outline-danger" href="borrarCate.php?id= <?= $val['id']?> & req=delete"><strong>Borrar</strong></a></td>
+              </tr>
+              <?php 
+                } 
+              ?>
             </tbody>
           </table>
         </div>
@@ -96,7 +120,7 @@
       </div>
       
       <!-- /////////Modal de registro de nuevo estuiante //////////-->
-      <div class="modal fade" id="registrarEstudiantes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="backdrop-filter: blur(5px)">
+      <div class="modal fade" id="registrar_categoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="backdrop-filter: blur(5px)">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" >
           <div class="modal-content" >
             <div class="modal-header" >
@@ -104,39 +128,43 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="background-color: rgb(231, 253, 246);">
-              <form class="col d-flex flex-wrap" method="post">
+              <form class="col d-flex flex-wrap" action="registrarCate.php" method="post">
                 <div class="mb-1 col-12">
                   <label for="nombres" class="form-label">Nombres</label>
                   <input 
                     type="text"
                     id="nombres"
                     name="nombres"
-                    class="form-control"  
+                    class="form-control" 
+                    placeholder="Digitar Nombre"
+                  />
+                </div>
+
+                
+
+                <div class="mb-1 col-12">
+                  <label for="descripcion" class="form-label">Descripcion</label>
+                  <input 
+                    type="text"
+                    id="descripcion"
+                    name="descripcion"
+                    class="form-control"
+                    placeholder="Digitar Descripcion"
                   />
                 </div>
 
                 <div class="mb-1 col-12">
-                  <label for="direccion" class="form-label">Direccion</label>
+                  <label for="imagen" class="form-label">Imagen</label>
                   <input 
-                    type="text"
-                    id="direccion"
-                    name="direccion"
-                    class="form-control"  
-                  />
-                </div>
-
-                <div class="mb-1 col-12">
-                  <label for="logros" class="form-label">Logros</label>
-                  <input 
-                    type="text"
-                    id="logros"
-                    name="logros"
+                    type="file"
+                    id="imagen"
+                    name="imagen"
                     class="form-control"  
                   />
                 </div>
 
                 <div class=" col-12 m-2">
-                  <input type="submit" class="btn btn-primary" value="guardar" name="guardar"/>
+                  <input type="submit" class="btn btn-success" value="Guardar" name="guardar"/>
                 </div>
               </form>  
             </div>       
